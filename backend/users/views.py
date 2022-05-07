@@ -8,7 +8,9 @@ from .serializers import CustomUserSerializer
 
 
 class CustomUserViewSet(UserViewSet):
+    """Представление для модели User, основанное на вьюсете из Djoser."""
     serializer_class = CustomUserSerializer
+    http_method_names = ['get', 'post']
 
     def get_queryset(self):
         return super(UserViewSet, self).get_queryset()
@@ -29,11 +31,22 @@ class CustomUserViewSet(UserViewSet):
             return super(UserViewSet, self).get_permissions()
         return super().get_permissions()   
 
-    @action(["get", "put", "patch", "delete"], detail=False)
+    @action(["get"], detail=False)
     def me(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return super().me(request, *args, **kwargs)
+
+    # FORBIDDEN_METHODS = (
+    #     'activation', 'resend_activation', 'reset_password',
+    #     'reset_password_confirm', 'set_username', 'reset_username',
+    #     'reset_username_confirm',
+    # )
+
+    # def __getattribute__(self, name):
+    #     if name in self.FORBIDDEN_METHODS:
+    #         raise AttributeError('no such method')
+    #     return super().__getattribute__(name)
 
 
 

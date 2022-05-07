@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.apps import apps
 
+from .validators import validate_username
 # from main.models import Recipe
 # Recipe = apps.get_model(app_label='main', model_name='Recipe')
 
@@ -24,6 +25,11 @@ class CustomUser(AbstractUser):
         blank=True,
         related_name = 'subscribers',
         verbose_name='Любимые авторы',
+    )
+    username = models.CharField(
+        max_length=150,
+        validators=[validate_username],
+        verbose_name='Логин',
     )
     favorite_recipes = models.ManyToManyField(
         'main.Recipe',
