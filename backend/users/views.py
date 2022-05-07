@@ -1,25 +1,44 @@
-from django.shortcuts import render
-from rest_framework.decorators import api_view
-from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.response import Response
+from djoser.views import UserViewSet
+from rest_framework import permissions
+from rest_framework.decorators import action
 from rest_framework import status
+from rest_framework.response import Response
 
-from .serializers import GetTokenSerializer
+from .serializers import CustomUserSerializer
 
-@api_view(['POST'])
-def login(request):
-    serializer = GetTokenSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    email = serializer.validated_data.get('email')
-    password = serializer.validated_data.get('password')
-    user = authenticate(request, email=email, password=password)
-    if user is not None:
-        access_token = RefreshToken.for_user(user).access_token
-        data = {"token": str(access_token)}
-        return Response(data, status=status.HTTP_201_CREATED)
-    errors = {"error": "email or password is incorrect"}
-    return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomUserViewSet(UserViewSet):
+    serializer_class = CustomUserSerializer
+
+    def get_queryset(self):
+        return super(UserViewSet, self).get_queryset()
+
+    def get_serializer_class(self):
+        if self.action == "me":
+            return self.serializer_class
+        return super().get_serializer_class()
+    
+    PERMISSION_PATTERNS = {
+        "retrieve": permissions.IsAuthenticated,
+        "list": permissions.AllowAny,
+    }
+
+    def get_permissions(self):
+        if self.action in self.PERMISSION_PATTERNS:
+            self.permission_classes = (self.PERMISSION_PATTERNS[self.action],)
+            return super(UserViewSet, self).get_permissions()
+        return super().get_permissions()   
+
+    @action(["get", "put", "patch", "delete"], detail=False)
+    def me(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return super().me(request, *args, **kwargs)
+
+
+
+
+
 
 
 
