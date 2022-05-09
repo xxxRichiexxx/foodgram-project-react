@@ -3,14 +3,19 @@ from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import CustomUserSerializer
+
+
+User = get_user_model()
 
 
 class CustomUserViewSet(UserViewSet):
     """Представление для модели User, основанное на вьюсете из Djoser."""
     serializer_class = CustomUserSerializer
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'delete']
 
     def get_queryset(self):
         return super(UserViewSet, self).get_queryset()
@@ -36,6 +41,33 @@ class CustomUserViewSet(UserViewSet):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return super().me(request, *args, **kwargs)
+
+    @action(methods=['post', 'delete'], detail=True)
+    def subscribe(self, request, id):
+        user = request.user
+        try:
+            author = User.objects.get(id=id)
+        except ObjectDoesNotExist:
+            data = {
+                "errors": "автора не существует"
+            }
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+        data = {
+            "id": author.id,
+            "email": author.email,
+        }
+        if request.method == 'DELETE':
+            user.authors.remove(author)
+            return Response(data, status=status.HTTP_204_NO_CONTENT)
+        user.authors.add(author)
+        return Response(data, status=status.HTTP_201_CREATED)
+
+    @action(['get'], detail=False)
+    def subscriptions(self, request):
+        user = request.user
+        self.queryset = user.authors.all()
+        return self.list(self, request)
+
 
     # FORBIDDEN_METHODS = (
     #     'activation', 'resend_activation', 'reset_password',

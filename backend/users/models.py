@@ -3,8 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.apps import apps
 
 from .validators import validate_username
-# from main.models import Recipe
-# Recipe = apps.get_model(app_label='main', model_name='Recipe')
+
 
 class CustomUser(AbstractUser):
     """Модель пользователя."""
@@ -38,6 +37,13 @@ class CustomUser(AbstractUser):
         related_name = 'connoisseurs',
         verbose_name='Любимые рецепты',       
     )
+    shopping_list = models.ManyToManyField(
+        'main.Recipe',
+        null=True,
+        blank=True,
+        related_name = 'buyers',
+        verbose_name='Покупки',       
+    )
     first_name = models.CharField(
         max_length=150,
     )
@@ -54,3 +60,7 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+    @property
+    def is_admin(self):
+        return self.role == 'admin'
