@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Recipe, RecipeIngredients
+from .models import Recipe, RecipeIngredients, Ingredient
 from tags.serializers import TagSerialiser
 from users.serializers import CustomUserSerializer
 from .serialaizer_fields import Base64ImageField
@@ -48,10 +48,14 @@ class RecipeGetSerialiser(serializers.ModelSerializer):
 
 
 class IngredientCreateSerializer(serializers.ModelSerializer):
+	id = serializers.PrimaryKeyRelatedField(
+		source='ingredient_id',
+		queryset=Ingredient.objects.all(),		
+	)
 
 	class Meta:
 		model = RecipeIngredients
-		fields = ('ingredient_id', 'amount')
+		fields = ('id', 'amount')
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):

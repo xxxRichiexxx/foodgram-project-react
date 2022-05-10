@@ -13,4 +13,5 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.AllowAny,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     search_fields = ('^name',)
+    pagination_class = None
 
