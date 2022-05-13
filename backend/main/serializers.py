@@ -28,7 +28,7 @@ class RecipeGetSerialiser(serializers.ModelSerializer):
     
 	class Meta:   
 		model = Recipe
-		exclude = ['author_id']
+		exclude = ['author_id']   # Странный момент
 
 	def get_is_favorited(self, obj):
 		user = self.context['request'].user
@@ -44,7 +44,7 @@ class RecipeGetSerialiser(serializers.ModelSerializer):
 
 	def get_ingredients(self, obj):
 		ingredients = RecipeIngredients.objects.filter(recipe_id = obj)
-		return IngredientsGetSerializer(instance=ingredients, many=True).data
+		return IngredientsGetSerializer(ingredients, many=True).data
 
 
 class IngredientCreateSerializer(serializers.ModelSerializer):
@@ -64,12 +64,8 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Recipe
-		fields = (
-		'id',
-		'ingredients',
-		'tags',
-		'image',
-		'name', 'text', 'cooking_time')
+		fields = ('id', 'ingredients', 'tags', 'image', 'name', 'text', 'cooking_time',)
+		# exclude = ('author_id', 'date',)
 		
 	def create(self, validated_data):
 		ingredients = validated_data.pop('recipe_ingredients')

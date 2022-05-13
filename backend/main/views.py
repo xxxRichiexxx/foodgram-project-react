@@ -33,6 +33,20 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.SERIALIZERS[self.action]
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        obj = serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            RecipeGetSerialiser(
+              obj,
+              context=self.get_serializer_context(),
+              ).data,
+            status=status.HTTP_201_CREATED,
+            headers=headers,
+        )
+
     def execution(self, request, pk, attr):
         user = request.user
         try:
@@ -67,7 +81,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def shopping_cart(self, request, pk):
         return self.execution(request, pk, 'shopping_list')
-
 
     @action(['GET'], detail=False)
     def download_shopping_cart(self, request):

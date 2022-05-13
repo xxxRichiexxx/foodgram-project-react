@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 
 from tags.models import Tag
 from ingredients.models import Ingredient
@@ -16,7 +17,7 @@ class Recipe(models.Model):
         verbose_name='Автор'
     )
     name = models.CharField(
-        max_length=100,
+        max_length=200,
         verbose_name='Название'
     )
     image = models.ImageField(
@@ -35,7 +36,10 @@ class Recipe(models.Model):
         Tag,
         verbose_name='Теги',
     )
-    cooking_time = models.IntegerField()
+    cooking_time = models.IntegerField(
+        validators=[MinValueValidator(1)],
+        verbose_name='Время приготовления',
+    )
     date = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Дата публикации',

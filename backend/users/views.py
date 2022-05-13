@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, SubscriptionsSerializer
 
 
 User = get_user_model()
@@ -33,7 +33,7 @@ class CustomUserViewSet(UserViewSet):
     def get_permissions(self):
         if self.action in self.PERMISSION_PATTERNS:
             self.permission_classes = (self.PERMISSION_PATTERNS[self.action],)
-            return super(UserViewSet, self).get_permissions()
+            return super(UserViewSet, self).get_permissions()  # Возможно это лишнее. Может просто вернуть пермишн без лишнего супер?
         return super().get_permissions()   
 
     @action(["get"], detail=False)
@@ -48,37 +48,23 @@ class CustomUserViewSet(UserViewSet):
         try:
             author = User.objects.get(id=id)
         except ObjectDoesNotExist:
-            data = {
-                "errors": "автора не существует"
-            }
+            data = {"errors": "автора не существует"}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
-        data = {
-            "id": author.id,
-            "email": author.email,
-        }
         if request.method == 'DELETE':
             user.authors.remove(author)
-            return Response(data, status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         user.authors.add(author)
+        data = SubscriptionsSerializer(
+            author,
+            context=self.get_serializer_context()
+            ).data
         return Response(data, status=status.HTTP_201_CREATED)
 
     @action(['get'], detail=False)
     def subscriptions(self, request):
-        user = request.user
-        self.queryset = user.authors.all()
+        self.queryset = request.user.authors.all()
+        self.serializer_class = SubscriptionsSerializer
         return self.list(self, request)
-
-
-    # FORBIDDEN_METHODS = (
-    #     'activation', 'resend_activation', 'reset_password',
-    #     'reset_password_confirm', 'set_username', 'reset_username',
-    #     'reset_username_confirm',
-    # )
-
-    # def __getattribute__(self, name):
-    #     if name in self.FORBIDDEN_METHODS:
-    #         raise AttributeError('no such method')
-    #     return super().__getattribute__(name)
 
 
 
