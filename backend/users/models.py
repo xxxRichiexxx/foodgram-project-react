@@ -30,14 +30,14 @@ class CustomUser(AbstractUser):
         verbose_name='Логин',
     )
     favorite_recipes = models.ManyToManyField(
-        'main.Recipe',
+        'recipes.Recipe',
         null=True,
         blank=True,
         related_name = 'connoisseurs',
         verbose_name='Любимые рецепты',       
     )
     shopping_list = models.ManyToManyField(
-        'main.Recipe',
+        'recipes.Recipe',
         null=True,
         blank=True,
         related_name = 'buyers',

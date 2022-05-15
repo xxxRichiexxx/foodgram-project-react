@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from djoser.serializers import UserSerializer
 
-from main.models import Recipe
+from recipes.models import Recipe
 
 
 class RecipeSerializer(serializers.ModelSerializer):

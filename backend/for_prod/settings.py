@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'djoser',
     'users',
     'tags',
-    'main',
+    'recipes',
     'ingredients',
     
 ]
@@ -134,7 +134,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'main.paginators.CustomPageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'recipes.paginators.CustomPageNumberPagination',
 }
 
 STATIC_URL = '/static/'

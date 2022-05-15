@@ -47,20 +47,11 @@ class AccountTests(APITestCase):
                         }
             ]
         }
-        self.expected_data_detail = {
-                        "email": "test_user_2@mail.ru",
-                        "id": 2,
-                        "username": "test-user-2",
-                        "first_name": "test_user",
-                        "last_name": "test_user",
-                        "is_subscribed": False
-        }
 
     def test_create_user(self):
         """
         Регистрация пользователя.
         """
-        # url = reverse('auth&users:customuser-create')
         url = "/api/users/"
         data = {
                 "email": "test_user_3@mail.ru",
@@ -69,9 +60,9 @@ class AccountTests(APITestCase):
                 "last_name": "test_user",
                 "password": "qwerty_123"
                 }
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(User.objects.count(), 3)
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(User.objects.count(), 3)
 
     def test_get_token(self):
         """
@@ -82,7 +73,7 @@ class AccountTests(APITestCase):
                 "email": "test_user_1@mail.ru",
                 "password": "qwerty_123",
         }
-        response = self.client.post(url, data, format='json')
+        response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK) # Должно быть 201
 
     def test_delete_token(self):
@@ -119,7 +110,7 @@ class AccountTests(APITestCase):
         self.client.force_authenticate(self.test_user_one)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, self.expected_data_detail)
+        self.assertEqual(response.data, self.expected_data_list['results'][1])
 
     def test_get_me_with_auth(self):
         """
@@ -129,7 +120,7 @@ class AccountTests(APITestCase):
         self.client.force_authenticate(self.test_user_two)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, self.expected_data_detail)
+        self.assertEqual(response.data, self.expected_data_list['results'][1])
 
     def test_set_password(self):
         """

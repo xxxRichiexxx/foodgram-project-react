@@ -115,13 +115,13 @@ class RecipesTests(APITestCase):
         """
         url = reverse('recipes:recipe-list')
         response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         image = response.data['results'][0].pop('image')
         self.assertNotEqual(image, None)
         date = response.data['results'][0].pop('date')
         self.assertNotEqual(date, None)
         ingredients = response.data['results'][0].pop('ingredients')
         self.assertNotEqual(ingredients, None)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, self.expected_data_list)
 
     def test_get_recipe(self):
@@ -147,8 +147,8 @@ class RecipesTests(APITestCase):
         data = {
             "ingredients": [
                 {
-                "id": 1,
-                "amount": 10
+                    "id": 1,
+                    "amount": 10
                 }
             ],
             "tags": [
@@ -163,6 +163,8 @@ class RecipesTests(APITestCase):
             "text": "test_recipe",
             "cooking_time": 2
         }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.client.force_authenticate(self.test_user_one)
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

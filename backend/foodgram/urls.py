@@ -9,7 +9,7 @@ urlpatterns = [
     path('api/users/', include('users.urls', namespace='auth&users')),
     path('api/auth/', include('users.urls', namespace='auth&users')),
     path('api/tags/', include('tags.urls', namespace='tags')),
-    path('api/recipes/', include('main.urls', namespace='recipes')),
+    path('api/recipes/', include('recipes.urls', namespace='recipes')),
     path('api/ingredients/', include('ingredients.urls', namespace='ingredients')),
 ]
 
