@@ -5,6 +5,7 @@ from djoser.views import TokenCreateView, TokenDestroyView
 
 from .views import CustomUserViewSet
 
+app_name = 'auth&users'
 
 router = DefaultRouter()
 router.register('', CustomUserViewSet)
