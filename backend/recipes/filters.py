@@ -21,11 +21,11 @@ class RecipesFilter(django_filters.FilterSet):
     def get_is_favorited(self, queryset, name, value):
         user = self.request.user
         if value == '1':
-            return user.favorite_recipes.all()
+            return queryset.filter(connoisseurs__id=user.id)
         return queryset.filter(~Q(id__in=user.favorite_recipes.values('id')))
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         user = self.request.user
         if value == '1':
-            return user.shopping_list.all()
+            return queryset.filter(buyers__id=user.id)
         return queryset.filter(~Q(id__in=user.shopping_list.values('id')))      

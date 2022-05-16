@@ -17,7 +17,6 @@ class IngredientsGetSerializer(serializers.ModelSerializer):
 		fields = ('id', 'name', 'amount', 'measurement_unit')
 
 
-
 class RecipeGetSerialiser(serializers.ModelSerializer):
 
 	tags = TagSerialiser(read_only=True, many=True)
@@ -82,5 +81,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
 	def update(self, instance, validated_data):
 		validated_data['id'] = instance.id
+		validated_data['image'] = validated_data.get('image', instance.image)
 		instance.delete()
 		return self.create(validated_data)		
