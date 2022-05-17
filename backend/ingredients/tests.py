@@ -6,7 +6,7 @@ from .models import Ingredient
 
 
 class IngredientsTests(APITestCase):
-
+    """Тесты для приложения Ингредиенты."""
     def setUp(self):
         self.ingredient_1 = Ingredient.objects.create(
             name = "Ингредиент_1",

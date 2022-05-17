@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-
 from .models import Recipe, RecipeIngredients
 
 
@@ -19,4 +18,4 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(RecipeIngredients)
 class RecipeIngredientsAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ('recipe_id', )

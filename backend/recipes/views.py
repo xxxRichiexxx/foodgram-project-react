@@ -1,13 +1,13 @@
-from rest_framework import viewsets
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
+
+from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import HttpResponse
-from reportlab.pdfgen import canvas
 from django.db import models
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 from rest_framework.decorators import action
 
 from .models import Recipe, RecipeIngredients
@@ -17,6 +17,14 @@ from .filters import RecipesFilter
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
+    """
+    Представление для реализации основных действий с рецептами:
+    - создание
+    - получение списка
+    - детализация
+    - редактирование
+    - удаление
+    """
     queryset = Recipe.objects.all()
     permission_classes = (ReadOnlyPermission|CreateAndUpdatePermission,)
     filter_backends = (DjangoFilterBackend,)
@@ -73,6 +81,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         methods=['post', 'delete'],
     )
     def favorite(self, request, pk):
+        """Добавление рецепта в избранное, удаление."""
         return self.execution(request, pk, 'favorite_recipes')
 
     @action(
@@ -80,10 +89,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
         methods=['post', 'delete'],
     )
     def shopping_cart(self, request, pk):
+        """Добавление рецепта в список покупок, удаление."""
         return self.execution(request, pk, 'shopping_list')
 
     @action(['GET'], detail=False)
     def download_shopping_cart(self, request):
+        """Скачивание списка покупок."""
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
         p = canvas.Canvas(response)
@@ -91,7 +102,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         p.setFont('FreeSans', 32)
         p.drawString(150, 800, "Список покупок:")
         user = request.user
-        ingredients = RecipeIngredients.objects.filter(recipe_id__buyers__id=user.id).values('ingredient_id__name').annotate(count=models.Sum('amount'), measurement_unit=models.F('ingredient_id__measurement_unit'))
+        ingredients = RecipeIngredients.objects.filter(
+            recipe_id__buyers__id=user.id
+            ).values('ingredient_id__name').annotate(
+                count=models.Sum('amount'), measurement_unit=models.F('ingredient_id__measurement_unit')
+                )
         x, y = 60, 750
         for ingredient in ingredients:
             p.drawString(

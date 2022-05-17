@@ -7,7 +7,7 @@ from .serialaizer_fields import Base64ImageField
 
 
 class IngredientsGetSerializer(serializers.ModelSerializer):
-
+	"""Вложенный сериализатор для отражения ингредиентов в разрезе рецепта."""
 	name = serializers.CharField(source='ingredient_id.name')
 	measurement_unit = serializers.CharField(source='ingredient_id.measurement_unit')
 	id = serializers.CharField(source='ingredient_id.id')
@@ -18,7 +18,7 @@ class IngredientsGetSerializer(serializers.ModelSerializer):
 
 
 class RecipeGetSerialiser(serializers.ModelSerializer):
-
+	"""Сериалайзер для чтения рецептов."""
 	tags = TagSerialiser(read_only=True, many=True)
 	author = CustomUserSerializer(read_only=True, many=False, source='author_id')
 	ingredients = serializers.SerializerMethodField()
@@ -27,7 +27,7 @@ class RecipeGetSerialiser(serializers.ModelSerializer):
     
 	class Meta:   
 		model = Recipe
-		exclude = ['author_id']   # Странный момент
+		exclude = ['author_id']
 
 	def get_is_favorited(self, obj):
 		user = self.context['request'].user
@@ -47,6 +47,7 @@ class RecipeGetSerialiser(serializers.ModelSerializer):
 
 
 class IngredientCreateSerializer(serializers.ModelSerializer):
+	"""Вложенный сериализатор для десериализации ингредиентов при создании рецепта."""
 	id = serializers.PrimaryKeyRelatedField(
 		source='ingredient_id',
 		queryset=Ingredient.objects.all(),		
@@ -58,13 +59,13 @@ class IngredientCreateSerializer(serializers.ModelSerializer):
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
+	"""Сериалайзер для создания рецептов."""
 	ingredients = IngredientCreateSerializer(many=True, source='recipe_ingredients')
 	image = Base64ImageField()
 
 	class Meta:
 		model = Recipe
-		fields = ('id', 'ingredients', 'tags', 'image', 'name', 'text', 'cooking_time',)
-		# exclude = ('author_id', 'date',)
+		exclude = ('author_id', 'date',)
 		
 	def create(self, validated_data):
 		ingredients = validated_data.pop('recipe_ingredients')

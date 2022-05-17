@@ -10,7 +10,7 @@ User = get_user_model()
 
 
 class TagsTests(APITestCase):
-
+    """Тесты для приложения Теги."""
     def setUp(self):
         self.tag_1 = Tag.objects.create(
             name = "Завтрак",

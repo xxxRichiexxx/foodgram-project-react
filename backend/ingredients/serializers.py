@@ -4,6 +4,7 @@ from .models import Ingredient
 
 
 class IngredientSerializer(serializers.ModelSerializer):
+	"""Сериалайзер медели ингредиентов."""
 
 	class Meta:
 		model = Ingredient

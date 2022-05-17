@@ -9,7 +9,7 @@ User = get_user_model()
 
 
 class Recipe(models.Model):
-    """" Модель рецептов."""
+    """"Модель рецептов."""
     author_id = models.ForeignKey(
         User,
         null=True,
@@ -29,7 +29,6 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient, 
         through='RecipeIngredients',
-        related_name='recipes',
         verbose_name='Ингредиенты',
     )
     tags = models.ManyToManyField(
@@ -56,7 +55,7 @@ class Recipe(models.Model):
 
 
 class RecipeIngredients(models.Model):
-    """" Модель рецепты-ингредиенты."""
+    """"Промежуточная модель рецепты-ингредиенты."""
     recipe_id = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
@@ -69,7 +68,7 @@ class RecipeIngredients(models.Model):
         related_name='ingredient_recipes',
         verbose_name='Ингредиент',
     )
-    amount = models.IntegerField()
+    amount = models.IntegerField(verbose_name='Количество')
 
     class Meta:
         verbose_name='Рецепт - Ингредиент'

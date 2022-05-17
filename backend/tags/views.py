@@ -6,6 +6,7 @@ from .serializers import TagSerialiser
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
+    """Представление для получения списка и детализации по Тегам."""
     queryset = Tag.objects.all()
     serializer_class = TagSerialiser
     pagination_class = None

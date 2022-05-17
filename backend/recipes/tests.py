@@ -10,12 +10,11 @@ from django.core.files.base import File
 from .models import Recipe, Ingredient, RecipeIngredients
 from tags.models import Tag
 
-
 User = get_user_model()
 
 
 class RecipesTests(APITestCase):
-
+    """Тесты для приложения Рецепты."""
     def setUp(self):
         self.test_user_one = User.objects.create_user(
             username='test-user-1',
