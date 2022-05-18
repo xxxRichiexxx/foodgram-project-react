@@ -1,8 +1,9 @@
 import django_filters
 from django.db.models import Q
 
-from .models import Recipe
 from tags.models import Tag
+
+from .models import Recipe
 
 
 class RecipesFilter(django_filters.FilterSet):
@@ -11,10 +12,12 @@ class RecipesFilter(django_filters.FilterSet):
     tags = django_filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         to_field_name='slug',
-        queryset = Tag.objects.all(),
+        queryset=Tag.objects.all(),
     )
     is_favorited = django_filters.CharFilter(method='get_is_favorited')
-    is_in_shopping_cart = django_filters.CharFilter(method='get_is_in_shopping_cart')
+    is_in_shopping_cart = django_filters.CharFilter(
+        method='get_is_in_shopping_cart',
+        )
 
     class Meta:
         model = Recipe
@@ -30,4 +33,4 @@ class RecipesFilter(django_filters.FilterSet):
         user = self.request.user
         if value == '1':
             return queryset.filter(buyers__id=user.id)
-        return queryset.filter(~Q(id__in=user.shopping_list.values('id')))      
+        return queryset.filter(~Q(id__in=user.shopping_list.values('id')))

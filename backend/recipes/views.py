@@ -1,19 +1,18 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+from django.http import HttpResponse
+from django_filters.rest_framework import DjangoFilterBackend
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from django.core.exceptions import ObjectDoesNotExist
-from django_filters.rest_framework import DjangoFilterBackend
-from django.http import HttpResponse
-from django.db import models
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
-from .models import Recipe, RecipeIngredients
-from .serializers import RecipeGetSerialiser, RecipeCreateSerializer
-from .permissions import ReadOnlyPermission, CreateAndUpdatePermission
 from .filters import RecipesFilter
+from .models import Recipe, RecipeIngredients
+from .permissions import CreateAndUpdatePermission, ReadOnlyPermission
+from .serializers import RecipeCreateSerializer, RecipeGetSerialiser
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -26,7 +25,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     - удаление
     """
     queryset = Recipe.objects.all()
-    permission_classes = (ReadOnlyPermission|CreateAndUpdatePermission,)
+    permission_classes = (ReadOnlyPermission | CreateAndUpdatePermission,)
     filter_backends = (DjangoFilterBackend,)
     filter_class = RecipesFilter
 
@@ -74,7 +73,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             getattr(user, attr).remove(recipe)
             return Response(data, status=status.HTTP_204_NO_CONTENT)
         getattr(user, attr).add(recipe)
-        return Response(data, status=status.HTTP_201_CREATED)        
+        return Response(data, status=status.HTTP_201_CREATED)
 
     @action(
         detail=True,
@@ -105,13 +104,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ingredients = RecipeIngredients.objects.filter(
             recipe_id__buyers__id=user.id
             ).values('ingredient_id__name').annotate(
-                count=models.Sum('amount'), measurement_unit=models.F('ingredient_id__measurement_unit')
+                count=models.Sum('amount'),
+                measurement_unit=models.F('ingredient_id__measurement_unit')
                 )
         x, y = 60, 750
         for ingredient in ingredients:
             p.drawString(
                 x, y,
-                f"- {ingredient['ingredient_id__name']} ({ingredient['measurement_unit']}) - {ingredient['count']}"
+                f"""- {ingredient['ingredient_id__name']} ({ingredient['measurement_unit']})
+                 - {ingredient['count']}"""
             )
             y -= 30
         p.showPage()

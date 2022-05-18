@@ -1,13 +1,11 @@
-from djoser.views import UserViewSet
-from rest_framework import permissions
-from rest_framework.decorators import action
-from rest_framework import status
-from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from djoser.views import UserViewSet
+from rest_framework import permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .serializers import CustomUserSerializer, SubscriptionsSerializer
-
 
 User = get_user_model()
 
@@ -24,7 +22,7 @@ class CustomUserViewSet(UserViewSet):
         if self.action == "me":
             return self.serializer_class
         return super().get_serializer_class()
-    
+
     PERMISSION_PATTERNS = {
         "retrieve": permissions.IsAuthenticated,
         "list": permissions.AllowAny,
@@ -32,9 +30,8 @@ class CustomUserViewSet(UserViewSet):
 
     def get_permissions(self):
         if self.action in self.PERMISSION_PATTERNS:
-            self.permission_classes = (self.PERMISSION_PATTERNS[self.action],)
-            return super(UserViewSet, self).get_permissions()  # Возможно это лишнее. Может просто вернуть пермишн без лишнего супер?
-        return super().get_permissions()   
+            return [self.PERMISSION_PATTERNS[self.action]()]
+        return super().get_permissions()
 
     @action(["get"], detail=False)
     def me(self, request, *args, **kwargs):
@@ -65,11 +62,3 @@ class CustomUserViewSet(UserViewSet):
         self.queryset = request.user.authors.all()
         self.serializer_class = SubscriptionsSerializer
         return self.list(self, request)
-
-
-
-
-
-
-
-

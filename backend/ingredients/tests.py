@@ -9,23 +9,23 @@ class IngredientsTests(APITestCase):
     """Тесты для приложения Ингредиенты."""
     def setUp(self):
         self.ingredient_1 = Ingredient.objects.create(
-            name = "Ингредиент_1",
-            measurement_unit = "кг",
+            name="Ингредиент_1",
+            measurement_unit="кг",
         )
         self.ingredient_2 = Ingredient.objects.create(
-            name = "Ингредиент_2",
-            measurement_unit = "кг",
+            name="Ингредиент_2",
+            measurement_unit="кг",
         )
         self.expected_data = [
             {
-            "id": 1,
-            "name": "Ингредиент_1",
-            "measurement_unit": "кг"
+                "id": 1,
+                "name": "Ингредиент_1",
+                "measurement_unit": "кг"
             },
             {
-            "id": 2,
-            "name": "Ингредиент_2",
-            "measurement_unit": "кг"
+                "id": 2,
+                "name": "Ингредиент_2",
+                "measurement_unit": "кг"
             }
         ]
 

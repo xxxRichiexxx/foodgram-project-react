@@ -1,18 +1,19 @@
-from rest_framework import serializers
 from djoser.serializers import UserSerializer
+from rest_framework import serializers
 
 from recipes.models import Recipe
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-
+    """Вложенный сериалайзер для отражения рецептов в разрезе пользователя."""
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
 
 
 class CustomUserSerializer(UserSerializer):
-    is_subscribed = serializers.SerializerMethodField() 
+    """Сериалайзер модели пользователей."""
+    is_subscribed = serializers.SerializerMethodField()
 
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ('is_subscribed',)
@@ -20,18 +21,23 @@ class CustomUserSerializer(UserSerializer):
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user
         try:
-            return user.authors.filter(id = obj.id).exists()
+            return user.authors.filter(id=obj.id).exists()
         except AttributeError:
             return False
 
+
 class SubscriptionsSerializer(CustomUserSerializer):
+    """Сериалайзер подписок."""
     recipes = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
 
     class Meta(CustomUserSerializer.Meta):
-        fields = CustomUserSerializer.Meta.fields + ('recipes_count', 'recipes',)      
+        fields = CustomUserSerializer.Meta.fields + (
+            'recipes_count', 'recipes',
+            )
 
-    def get_recipes_count(self, obj):
+    @staticmethod
+    def get_recipes_count(obj):
         return obj.recipes.count()
 
     def get_recipes(self, obj):

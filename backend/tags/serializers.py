@@ -4,7 +4,7 @@ from .models import Tag
 
 
 class TagSerialiser(serializers.ModelSerializer):
-	"""Сериалайзер тегов."""   
-	class Meta:   
+	"""Сериалайзер тегов."""
+	class Meta:
 		model = Tag
 		fields = '__all__'

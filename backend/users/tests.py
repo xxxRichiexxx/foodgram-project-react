@@ -1,7 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
@@ -29,22 +29,22 @@ class AccountTests(APITestCase):
             "next": None,
             "previous": None,
             "results": [
-                        {
-                        "email": "test_user_1@mail.ru",
-                        "id": 1,
-                        "username": "test-user-1",
-                        "first_name": "test_user",
-                        "last_name": "test_user",
-                        "is_subscribed": False
-                        },
-                        {
-                        "email": "test_user_2@mail.ru",
-                        "id": 2,
-                        "username": "test-user-2",
-                        "first_name": "test_user",
-                        "last_name": "test_user",
-                        "is_subscribed": False
-                        }
+                {
+                    "email": "test_user_1@mail.ru",
+                    "id": 1,
+                    "username": "test-user-1",
+                    "first_name": "test_user",
+                    "last_name": "test_user",
+                    "is_subscribed": False
+                },
+                {
+                    "email": "test_user_2@mail.ru",
+                    "id": 2,
+                    "username": "test-user-2",
+                    "first_name": "test_user",
+                    "last_name": "test_user",
+                    "is_subscribed": False
+                }
             ]
         }
 
@@ -74,7 +74,7 @@ class AccountTests(APITestCase):
                 "password": "qwerty_123",
         }
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK) # Должно быть 201
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete_token(self):
         """
@@ -146,4 +146,4 @@ class AccountTests(APITestCase):
                 "password": "qwerty_456",
         }
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)  # Должно быть 201    
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

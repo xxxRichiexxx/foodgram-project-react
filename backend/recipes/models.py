@@ -1,9 +1,9 @@
-from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
+from django.db import models
 
-from tags.models import Tag
 from ingredients.models import Ingredient
+from tags.models import Tag
 
 User = get_user_model()
 
@@ -27,7 +27,7 @@ class Recipe(models.Model):
         verbose_name='Описание',
     )
     ingredients = models.ManyToManyField(
-        Ingredient, 
+        Ingredient,
         through='RecipeIngredients',
         verbose_name='Ингредиенты',
     )
@@ -46,10 +46,10 @@ class Recipe(models.Model):
 
     class Meta:
         default_related_name = 'recipes'
-        ordering = ('id', 'name')
+        ordering = ['-date']
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
-        
+
     def __str__(self):
         return self.name
 
@@ -71,8 +71,8 @@ class RecipeIngredients(models.Model):
     amount = models.IntegerField(verbose_name='Количество')
 
     class Meta:
-        verbose_name='Рецепт - Ингредиент'
-        verbose_name_plural='Рецепты - Ингредиенты'
+        verbose_name = 'Рецепт - Ингредиент'
+        verbose_name_plural = 'Рецепты - Ингредиенты'
 
     def __str__(self):
         return f'{self.recipe_id.name}: {self.ingredient_id.name}'

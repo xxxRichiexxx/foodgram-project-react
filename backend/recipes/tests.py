@@ -1,14 +1,15 @@
-from PIL import Image
 from io import BytesIO
 
-from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.core.files.base import File
+from django.urls import reverse
+from PIL import Image
+from rest_framework import status
+from rest_framework.test import APITestCase
 
-from .models import Recipe, Ingredient, RecipeIngredients
 from tags.models import Tag
+
+from .models import Ingredient, Recipe, RecipeIngredients
 
 User = get_user_model()
 
@@ -31,65 +32,65 @@ class RecipesTests(APITestCase):
             password='qwerty_123',
         )
         self.tag_1 = Tag.objects.create(
-            name = "Завтрак",
-            color = "#E26C2D",
-            slug = "breakfast",
+            name="Завтрак",
+            color="#E26C2D",
+            slug="breakfast",
         )
         self.tag_2 = Tag.objects.create(
-            name = "Обед",
-            color = "#E26C2A",
-            slug = "lunch",
+            name="Обед",
+            color="#E26C2A",
+            slug="lunch",
         )
         self.ingredient_1 = Ingredient.objects.create(
-            name = "Ингредиент_1",
-            measurement_unit = "кг",
+            name="Ингредиент_1",
+            measurement_unit="кг",
         )
         self.ingredient_2 = Ingredient.objects.create(
-            name = "Ингредиент_2",
-            measurement_unit = "кг",
+            name="Ингредиент_2",
+            measurement_unit="кг",
         )
         file_obj = BytesIO()
         image = Image.new("RGBA", size=(50, 50), color=(256, 0, 0))
         image.save(file_obj, 'png')
         file_obj.seek(0)
         self.recipe_1 = Recipe.objects.create(
-            name = "рецепт_1",
-            text = "рецепт_1",
-            cooking_time = 2,
-            author_id = self.test_user_one,
-            image = File(file_obj, name='image')
+            name="рецепт_1",
+            text="рецепт_1",
+            cooking_time=2,
+            author_id=self.test_user_one,
+            image=File(file_obj, name='image')
         )
         self.recipe_1.tags.add(self.tag_1, self.tag_2)
         RecipeIngredients.objects.create(
-            recipe_id = self.recipe_1,
-            ingredient_id = self.ingredient_1,
-            amount = 20,          
+            recipe_id=self.recipe_1,
+            ingredient_id=self.ingredient_1,
+            amount=20,
         )
         RecipeIngredients.objects.create(
-            recipe_id = self.recipe_1,
-            ingredient_id = self.ingredient_2,
-            amount = 20,          
+            recipe_id=self.recipe_1,
+            ingredient_id=self.ingredient_2,
+            amount=20,
         )
         self.expected_data_list = {
-        "count": 1,
-        "next": None,
-        "previous": None,
-        "results": [
-                    {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
                     "id": 1,
                     "tags": [
-                            {
+                        {
                             "id": 1,
                             "name": "Завтрак",
                             "color": "#E26C2D",
                             "slug": "breakfast"
-                            },
-                            {
+                        },
+                        {
                             "id": 2,
                             "name": "Обед",
                             "color": "#E26C2A",
                             "slug": "lunch"
-                            }                            
+                        }
                     ],
                     "author": {
                                 "email": 'test_user_1@mail.ru',
@@ -105,7 +106,7 @@ class RecipesTests(APITestCase):
                     "text": "рецепт_1",
                     "cooking_time": 2
                     }
-        ]
+            ]
         }
 
     def test_get_recipes(self):
@@ -204,7 +205,7 @@ class RecipesTests(APITestCase):
 
     def test_add_del_to_shopping_cart(self):
         """
-        Добавление рецепта к списку покупок, удаление. 
+        Добавление рецепта к списку покупок, удаление.
         """
         url = reverse('recipes:recipe-shopping-cart', args=[1])
         response = self.client.post(url)
@@ -219,7 +220,7 @@ class RecipesTests(APITestCase):
 
     def test_add_del_to_favorite(self):
         """
-        Добавление рецепта в избранное, удаление. 
+        Добавление рецепта в избранное, удаление.
         """
         url = reverse('recipes:recipe-favorite', args=[1])
         response = self.client.post(url)
@@ -230,11 +231,11 @@ class RecipesTests(APITestCase):
         self.assertEqual(self.test_user_one.favorite_recipes.count(), 1)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(self.test_user_one.favorite_recipes.count(), 0)     
+        self.assertEqual(self.test_user_one.favorite_recipes.count(), 0)
 
     def test_add_del_to_subscriptions(self):
         """
-        Добавление автора в подписки, удаление. 
+        Добавление автора в подписки, удаление.
         """
         url = reverse('auth&users:customuser-subscribe', args=[2])
         response = self.client.post(url)
@@ -245,11 +246,11 @@ class RecipesTests(APITestCase):
         self.assertEqual(self.test_user_one.authors.count(), 1)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(self.test_user_one.authors.count(), 0)  
+        self.assertEqual(self.test_user_one.authors.count(), 0)
 
     def test_get_subscriptions(self):
         """
-        Просмотр подписок. 
+        Просмотр подписок.
         """
         url = reverse('auth&users:customuser-subscriptions')
         response = self.client.get(url)
@@ -260,28 +261,28 @@ class RecipesTests(APITestCase):
         url = reverse('auth&users:customuser-subscriptions')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        expected_data_list={
-        "count": 1,
-        "next": None,
-        "previous": None,
-        "results": [
-                    {
+        expected_data_list = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
                     "first_name": "test_user",
                     "last_name": "test_user",
                     "username": "test-user-1",
                     "id": 1,
-                    "email": "test_user_1@mail.ru",                                       
+                    "email": "test_user_1@mail.ru",
                     "is_subscribed": True,
                     "recipes": [
-                                {
-                                "id": 1,
-                                "name": "рецепт_1",
-                                "cooking_time": 2
-                                }
+                        {
+                            "id": 1,
+                            "name": "рецепт_1",
+                            "cooking_time": 2
+                        }
                     ],
                     "recipes_count": 1
-                    }
-        ]
+                }
+            ]
         }
         image = response.data['results'][0]['recipes'][0].pop('image')
         self.assertNotEqual(image, None)

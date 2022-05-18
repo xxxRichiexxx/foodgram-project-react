@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 from .validators import validate_username
 
@@ -18,10 +18,10 @@ class CustomUser(AbstractUser):
     )
     authors = models.ManyToManyField(
         'self',
-        symmetrical = False,
+        symmetrical=False,
         null=True,
         blank=True,
-        related_name = 'subscribers',
+        related_name='subscribers',
         verbose_name='Любимые авторы',
     )
     username = models.CharField(
@@ -33,15 +33,15 @@ class CustomUser(AbstractUser):
         'recipes.Recipe',
         null=True,
         blank=True,
-        related_name = 'connoisseurs',
-        verbose_name='Любимые рецепты',       
+        related_name='connoisseurs',
+        verbose_name='Любимые рецепты',
     )
     shopping_list = models.ManyToManyField(
         'recipes.Recipe',
         null=True,
         blank=True,
-        related_name = 'buyers',
-        verbose_name='Покупки',       
+        related_name='buyers',
+        verbose_name='Покупки',
     )
     first_name = models.CharField(
         max_length=150,
