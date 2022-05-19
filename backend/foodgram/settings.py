@@ -137,7 +137,6 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'recipes.paginators.CustomPageNumberPagination',
     'DEFAULT_THROTTLE_CLASSES': [
