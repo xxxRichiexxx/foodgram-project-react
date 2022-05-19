@@ -15,6 +15,9 @@ SECRET_KEY = '*6m9xp!3yngk4ap4+7#3p&l2j%%q#_dw#fr$wrnson8x+&9r5='
 DEBUG = True
 
 ALLOWED_HOSTS = []
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -28,13 +31,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
-    'rest_framework.authtoken', 
+    'rest_framework.authtoken',
     'djoser',
+    'debug_toolbar',
     'users',
     'tags',
     'recipes',
     'ingredients',
-    
 ]
 
 MIDDLEWARE = [
@@ -45,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'foodgram.urls'
@@ -122,13 +126,26 @@ STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated', 
+        'rest_framework.permissions.IsAuthenticated',
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'recipes.paginators.CustomPageNumberPagination',
+    'DEFAULT_THROTTLE_CLASSES': [
+        'foodgram.throttling.BurstRateUserThrottle',
+        'foodgram.throttling.SustainedRateUserThrottle',
+        'foodgram.throttling.BurstRateAnonThrottle',
+        'foodgram.throttling.SustainedRateAnonThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'burst_user': '15/second',
+        'sustained_user': '2500/hour',
+        'burst_anon': '15/second',
+        'sustained_anon': '10000/hour',
+    }
 }
 
 STATIC_URL = '/static/'
@@ -136,5 +153,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
-

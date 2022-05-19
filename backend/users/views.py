@@ -59,6 +59,6 @@ class CustomUserViewSet(UserViewSet):
 
     @action(['get'], detail=False)
     def subscriptions(self, request):
-        self.queryset = request.user.authors.all()
+        self.queryset = request.user.authors.prefetch_related('recipes')
         self.serializer_class = SubscriptionsSerializer
         return self.list(self, request)

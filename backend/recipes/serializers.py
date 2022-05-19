@@ -48,7 +48,7 @@ class RecipeGetSerialiser(serializers.ModelSerializer):
 
 	@staticmethod
 	def get_ingredients(obj):
-		ingredients = RecipeIngredients.objects.filter(recipe_id=obj)
+		ingredients = obj.recipe_ingredients.all()
 		return IngredientsGetSerializer(ingredients, many=True).data
 
 

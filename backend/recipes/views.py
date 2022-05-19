@@ -8,6 +8,7 @@ from reportlab.pdfgen import canvas
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.db.models import Prefetch
 
 from .filters import RecipesFilter
 from .models import Recipe, RecipeIngredients
@@ -24,7 +25,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
     - редактирование
     - удаление
     """
-    queryset = Recipe.objects.all()
+    queryset = Recipe.objects.select_related('author_id').prefetch_related(
+        Prefetch('tags'),
+        Prefetch(
+            'recipe_ingredients',
+            queryset=RecipeIngredients.objects.select_related('ingredient_id')
+        )
+    )
     permission_classes = (ReadOnlyPermission | CreateAndUpdatePermission,)
     filter_backends = (DjangoFilterBackend,)
     filter_class = RecipesFilter
