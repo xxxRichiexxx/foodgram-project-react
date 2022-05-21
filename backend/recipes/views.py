@@ -102,7 +102,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def download_shopping_cart(self, request):
         """Скачивание списка покупок."""
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+        response['Content-Disposition'] = ('attachment; '
+                                           'filename="somefilename.pdf"')
         p = canvas.Canvas(response)
         pdfmetrics.registerFont(TTFont('FreeSans', 'FreeSans.ttf'))
         p.setFont('FreeSans', 32)

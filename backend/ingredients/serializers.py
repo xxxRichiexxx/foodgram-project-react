@@ -4,8 +4,8 @@ from .models import Ingredient
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-	"""Сериалайзер медели ингредиентов."""
+    """Сериалайзер медели ингредиентов."""
 
-	class Meta:
-		model = Ingredient
-		fields = '__all__'
+    class Meta:
+        model = Ingredient
+        fields = '__all__'

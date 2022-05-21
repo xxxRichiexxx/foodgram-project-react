@@ -3,7 +3,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from django.conf import settings
 
 admin.site.site_header = "FOODGRAM"
 
@@ -32,7 +31,10 @@ urlpatterns = [
         'api/ingredients/',
         include('ingredients.urls', namespace='ingredients')
     ),
-    path('drf-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path(
+        'drf-auth/',
+        include('rest_framework.urls', namespace='rest_framework')
+    ),
 ]
 
 if settings.DEBUG:

@@ -65,3 +65,9 @@ class CustomUser(AbstractUser):
     @property
     def is_admin(self):
         return self.role == 'admin'
+
+    def save(self, *args,  **kwargs):
+        if self.is_admin:
+            self.is_staff = True
+            self.is_superuser = True
+        super().save(*args,  **kwargs)
