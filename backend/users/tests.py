@@ -106,8 +106,7 @@ class AccountTests(APITestCase):
         """
         Получение детальной информации о пользователе по id.
         """
-        # url = reverse('auth&users:customuser-detail', args=[2])
-        url = '/api/users/2/'
+        url = reverse('auth&users:customuser-detail', args=[2])
         self.client.force_authenticate(self.test_user_one)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
