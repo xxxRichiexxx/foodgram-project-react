@@ -54,12 +54,12 @@ class AccountTests(APITestCase):
         """
         url = "/api/users/"
         data = {
-                "email": "test_user_3@mail.ru",
-                "username": "test-user-3",
-                "first_name": "test_user",
-                "last_name": "test_user",
-                "password": "qwerty_123"
-                }
+            "email": "test_user_3@mail.ru",
+            "username": "test-user-3",
+            "first_name": "test_user",
+            "last_name": "test_user",
+            "password": "qwerty_123"
+        }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 3)
@@ -70,8 +70,8 @@ class AccountTests(APITestCase):
         """
         url = reverse('auth&users:login')
         data = {
-                "email": "test_user_1@mail.ru",
-                "password": "qwerty_123",
+            "email": "test_user_1@mail.ru",
+            "password": "qwerty_123",
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -129,21 +129,21 @@ class AccountTests(APITestCase):
         url = reverse('auth&users:customuser-set-password')
         self.client.force_authenticate(self.test_user_one)
         data = {
-                "new_password": "qwerty_456",
-                "current_password": "qwerty_123"
-                }
+            "new_password": "qwerty_456",
+            "current_password": "qwerty_123"
+        }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         url = reverse('auth&users:login')
         data = {
-                "email": "test_user_1@mail.ru",
-                "password": "qwerty_123",
+            "email": "test_user_1@mail.ru",
+            "password": "qwerty_123",
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         data = {
-                "email": "test_user_1@mail.ru",
-                "password": "qwerty_456",
+            "email": "test_user_1@mail.ru",
+            "password": "qwerty_456",
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

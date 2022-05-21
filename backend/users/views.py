@@ -54,7 +54,7 @@ class CustomUserViewSet(UserViewSet):
         data = SubscriptionsSerializer(
             author,
             context=self.get_serializer_context()
-            ).data
+        ).data
         return Response(data, status=status.HTTP_201_CREATED)
 
     @action(['get'], detail=False)

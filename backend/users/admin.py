@@ -13,7 +13,7 @@ class UserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (None, {
             'fields': (
-                'role',  'authors', 'favorite_recipes', 'shopping_list',
+                'role', 'authors', 'favorite_recipes', 'shopping_list',
             )
         }),
     )

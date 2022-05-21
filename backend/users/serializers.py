@@ -34,7 +34,7 @@ class SubscriptionsSerializer(CustomUserSerializer):
     class Meta(CustomUserSerializer.Meta):
         fields = CustomUserSerializer.Meta.fields + (
             'recipes_count', 'recipes',
-            )
+        )
 
     @staticmethod
     def get_recipes_count(obj):

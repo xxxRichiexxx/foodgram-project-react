@@ -54,9 +54,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(
             RecipeGetSerialiser(
-              obj,
-              context=self.get_serializer_context(),
-              ).data,
+                obj,
+                context=self.get_serializer_context(),
+            ).data,
             status=status.HTTP_201_CREATED,
             headers=headers,
         )
@@ -111,10 +111,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         user = request.user
         ingredients = RecipeIngredients.objects.filter(
             recipe_id__buyers__id=user.id
-            ).values('ingredient_id__name').annotate(
-                count=models.Sum('amount'),
-                measurement_unit=models.F('ingredient_id__measurement_unit')
-                )
+        ).values('ingredient_id__name').annotate(
+            count=models.Sum('amount'),
+            measurement_unit=models.F('ingredient_id__measurement_unit')
+        )
         x, y = 60, 750
         for ingredient in ingredients:
             p.drawString(

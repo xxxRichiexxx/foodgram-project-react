@@ -93,19 +93,19 @@ class RecipesTests(APITestCase):
                         }
                     ],
                     "author": {
-                                "email": 'test_user_1@mail.ru',
-                                "id": 1,
-                                "username": 'test-user-1',
-                                "first_name": 'test_user',
-                                "last_name": 'test_user',
-                                "is_subscribed": False
+                        "email": 'test_user_1@mail.ru',
+                        "id": 1,
+                        "username": 'test-user-1',
+                        "first_name": 'test_user',
+                        "last_name": 'test_user',
+                        "is_subscribed": False
                     },
                     "is_favorited": False,
                     "is_in_shopping_cart": False,
                     "name": "рецепт_1",
                     "text": "рецепт_1",
                     "cooking_time": 2
-                    }
+                }
             ]
         }
 
