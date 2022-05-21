@@ -36,6 +36,7 @@ jobs:
       run: |
         python -m flake8
         cd backend
+        python3 manage.py migrate
         python3 manage.py test
 
   backend_push_to_docker_hub:
