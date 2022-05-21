@@ -35,9 +35,9 @@ jobs:
     - name: Test with flake8
       run: |
         python -m flake8
-        rm backend/foodgram/settings.py
-        cp for_dev/settings.py backend/fodgram/settings.py
         cd backend
+        rm /foodgram/settings.py
+        cp for_dev/settings.py /fodgram/settings.py
         python3 manage.py test
 
   backend_push_to_docker_hub:
