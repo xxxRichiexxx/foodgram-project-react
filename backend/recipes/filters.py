@@ -16,7 +16,7 @@ class RecipesFilter(django_filters.FilterSet):
     )
     is_favorited = django_filters.BooleanFilter(
         method='get_is_favorited'
-        )
+    )
     is_in_shopping_cart = django_filters.BooleanFilter(
         method='get_is_in_shopping_cart',
     )
@@ -27,9 +27,10 @@ class RecipesFilter(django_filters.FilterSet):
 
     def get_is_favorited(self, queryset, name, value):
         user = self.request.user
+        favorited_recipes = queryset.filter(connoisseurs__id=user.id)
         if value == '1':
-            return queryset.filter(connoisseurs__id=user.id)
-        return queryset.filter(~Q(id__in=user.favorite_recipes.values('id')))
+            return favorited_recipes
+        return favorited_recipes.exclude()
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         user = self.request.user
