@@ -98,7 +98,5 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, instance, validated_data):
-        validated_data['id'] = instance.id
         validated_data['image'] = validated_data.get('image', instance.image)
-        instance.delete()
-        return self.create(validated_data)
+        return super().update(validated_data)
