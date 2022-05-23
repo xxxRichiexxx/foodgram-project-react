@@ -9,7 +9,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Prefetch
-from django.db.models import Exists, OuterRef
+# from django.db.models import Exists, OuterRef
 
 from .filters import RecipesFilter
 from .models import Recipe, RecipeIngredients
