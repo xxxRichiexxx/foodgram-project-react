@@ -9,6 +9,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Prefetch
+from django.db.models import Exists, OuterRef
 
 from .filters import RecipesFilter
 from .models import Recipe, RecipeIngredients
@@ -43,6 +44,20 @@ class RecipeViewSet(viewsets.ModelViewSet):
         'update': RecipeCreateSerializer,
         'partial_update': RecipeCreateSerializer,
     }
+
+    def get_queryset(self):
+        is_favorited_query = Recipe.objects.filter(
+            id=OuterRef('pk'),
+            connoisseurs__id = self.request.user.id
+        )
+        is_in_shopping_cart_query = Recipe.objects.filter(
+            id=OuterRef('pk'),
+            buyers__id = self.request.user.id
+        )
+        return Recipe.objects.annotate(
+            is_favorited=Exists(is_favorited_query),
+            is_in_shopping_cart=Exists(is_in_shopping_cart_query)
+        )
 
     def get_serializer_class(self):
         return self.SERIALIZERS[self.action]

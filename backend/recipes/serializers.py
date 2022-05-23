@@ -31,24 +31,24 @@ class RecipeGetSerialiser(serializers.ModelSerializer):
         source='author_id',
     )
     ingredients = serializers.SerializerMethodField()
-    is_favorited = serializers.SerializerMethodField()
-    is_in_shopping_cart = serializers.SerializerMethodField()
+    # is_favorited = serializers.SerializerMethodField()
+    # is_in_shopping_cart = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
         exclude = ['author_id']
 
-    def get_is_favorited(self, obj):
-        user = self.context['request'].user
-        if user.is_authenticated:
-            return user.favorite_recipes.filter(id=obj.id).exists()
-        return False
+    # def get_is_favorited(self, obj):
+    #     user = self.context['request'].user
+    #     if user.is_authenticated:
+    #         return user.favorite_recipes.filter(id=obj.id).exists()
+    #     return False
 
-    def get_is_in_shopping_cart(self, obj):
-        user = self.context['request'].user
-        if user.is_authenticated:
-            return user.shopping_list.filter(id=obj.id).exists()
-        return False
+    # def get_is_in_shopping_cart(self, obj):
+    #     user = self.context['request'].user
+    #     if user.is_authenticated:
+    #         return user.shopping_list.filter(id=obj.id).exists()
+    #     return False
 
     @staticmethod
     def get_ingredients(obj):
