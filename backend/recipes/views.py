@@ -1,4 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
