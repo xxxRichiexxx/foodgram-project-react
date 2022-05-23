@@ -27,7 +27,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     - удаление
     """
     queryset = Recipe.objects.select_related('author_id').prefetch_related(
-        Prefetch('tags'),
+        'tags',
         Prefetch(
             'recipe_ingredients',
             queryset=RecipeIngredients.objects.select_related('ingredient_id')
@@ -80,7 +80,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         user = request.user
         try:
             recipe = Recipe.objects.get(id=pk)
-        except ObjectDoesNotExist:
+        except Recipe.DoesNotExist:
             data = {
                 "errors": "рецепта не существует"
             }
