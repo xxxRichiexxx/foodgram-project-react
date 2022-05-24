@@ -14,13 +14,13 @@ load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv(
     'SECRET_KEY',
-    # default='*6m9xp!3yngk4ap4+7#3p&l2j%%q#_dw#fr$wrnson8x+&9r5='
+    default='*6m9xp!3yngk4ap4+7#3p&l2j%%q#_dw#fr$wrnson8x+&9r5='
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '51.250.106.127', 'localhost']
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
@@ -91,10 +91,9 @@ DATABASES = {
         'USER': os.getenv('POSTGRES_USER', default='postgres'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
         'HOST': os.getenv('DB_HOST', default='db'),
-        'PORT': os.getenv('DB_PORT', default=5432)
-    }
+        'PORT': os.getenv('DB_PORT', default=5432),
+    },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

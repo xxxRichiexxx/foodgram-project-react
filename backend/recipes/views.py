@@ -8,7 +8,8 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Prefetch
-# from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef
+from django.db.models import Value as V
 
 from .filters import RecipesFilter
 from .models import Recipe, RecipeIngredients
@@ -44,19 +45,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
         'partial_update': RecipeCreateSerializer,
     }
 
-    # def get_queryset(self):
-    #     is_favorited_query = Recipe.objects.filter(
-    #         id=OuterRef('pk'),
-    #         connoisseurs__id=self.request.user.id
-    #     )
-    #     is_in_shopping_cart_query = Recipe.objects.filter(
-    #         id=OuterRef('pk'),
-    #         buyers__id=self.request.user.id
-    #     )
-    #     return Recipe.objects.annotate(
-    #         is_favorited=Exists(is_favorited_query),
-    #         is_in_shopping_cart=Exists(is_in_shopping_cart_query)
-    #     )
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            is_favorited_query = self.request.user.favorite_recipes.filter(id=OuterRef('pk'))
+            is_in_shopping_cart_query = self.request.user.shopping_list.filter(id=OuterRef('pk'))
+            return Recipe.objects.annotate(
+                is_favorited=Exists(is_favorited_query),
+                is_in_shopping_cart=Exists(is_in_shopping_cart_query)
+            )
+        return Recipe.objects.annotate(
+                is_favorited=V(False),
+                is_in_shopping_cart=V(False)
+            )
 
     def get_serializer_class(self):
         return self.SERIALIZERS[self.action]
