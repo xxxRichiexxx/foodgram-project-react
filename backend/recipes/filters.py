@@ -1,5 +1,4 @@
 import django_filters
-from django.db.models import Q
 
 from tags.models import Tag
 

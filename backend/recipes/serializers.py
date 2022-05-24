@@ -36,7 +36,7 @@ class RecipeGetSerialiser(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ['id', 'tags', 'author', 'ingredients', 'is_favorited', 'is_in_shopping_cart', 'name', 'image', 'text', 'cooking_time', 'date' ]
+        exclude = ['author_id']
 
     @staticmethod
     def get_ingredients(obj):
