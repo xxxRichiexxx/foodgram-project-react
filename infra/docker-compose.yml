@@ -14,6 +14,7 @@ services:
     volumes:
       - static_value:/app/django_static/
       - media_value:/app/media/
+      - ../data/ingredients.json:/app/ingredients.json
     depends_on:
       - db
     env_file:
