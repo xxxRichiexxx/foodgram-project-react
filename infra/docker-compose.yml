@@ -36,7 +36,7 @@ services:
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
       - media_value:/var/html/media/
-      - static_value:/var/html/static/
+      - static_value:/var/html/django_static/
     depends_on:
       - frontend
 
