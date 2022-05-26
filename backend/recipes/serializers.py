@@ -87,4 +87,4 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         validated_data['image'] = validated_data.get('image', instance.image)
-        return super().update(validated_data)
+        return super().update(instance, validated_data)
