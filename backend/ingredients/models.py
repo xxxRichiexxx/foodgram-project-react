@@ -4,7 +4,7 @@ from django.db import models
 class Ingredient(models.Model):
     """ Модель ингредиентов."""
     name = models.CharField(
-        max_length=50,
+        max_length=250,
         verbose_name='Название',
     )
     measurement_unit = models.CharField(
