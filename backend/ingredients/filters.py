@@ -8,5 +8,5 @@ class IngredientsSearchFilter(filters.BaseFilterBackend):
         if name:
             part_one = queryset.filter(name__istartswith=name)
             part_two = queryset.filter(name__icontains=name)
-            return part_one.union(part_two)[:50]
+            return part_two.union(part_one)[:50]
         return queryset

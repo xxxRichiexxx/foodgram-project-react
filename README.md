@@ -5,6 +5,10 @@ Cтудент когорты №25 Python-разработчик. Яндекс.�
 ### Адрес сервера
 51.250.106.127
 
+### Учетные данные администратора
+log: admin@mail.ru
+pass: admin
+
 ### Состояние воркфлоу
 ![example workflow](https://github.com/xxxRichiexxx/foodgram-project-react/actions/workflows/for_main_branche_workflow.yml/badge.svg)
 
