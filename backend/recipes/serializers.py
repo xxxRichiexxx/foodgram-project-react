@@ -86,5 +86,13 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, instance, validated_data):
+        ingredients = validated_data.pop('recipe_ingredients')
         validated_data['image'] = validated_data.get('image', instance.image)
-        return super().update(instance, validated_data)
+        recipe = super().update(instance, validated_data)
+        recipe.ingredients.clear()
+        for ingredient in ingredients:
+            RecipeIngredients.objects.get_or_create(
+                recipe_id=recipe,
+                **ingredient,
+            )
+        return recipe
