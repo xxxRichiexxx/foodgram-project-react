@@ -135,6 +135,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             measurement_unit=models.F('ingredient_id__measurement_unit')
         )
         x, y = 60, 750
+        p.setFont('FreeSans', 18)
         for ingredient in ingredients:
             p.drawString(
                 x, y,
