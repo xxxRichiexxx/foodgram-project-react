@@ -11,7 +11,7 @@ class IngredientsSearchFilter(filters.BaseFilterBackend):
             part_two = queryset.filter(
                 name__icontains=name
             ).exclude(name__istartswith=name)
-            return part_one.union(part_two)[:50]
+            return part_one.union(part_two).order_by()[:50]
             # return queryset.filter(
             #     Q(name__istartswith=name) | Q(name__icontains=name)
             # )[:50]
