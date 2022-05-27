@@ -71,10 +71,8 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         model = Recipe
         exclude = ('author_id', 'date',)
 
-    def create(self, validated_data):
-        ingredients = validated_data.pop('recipe_ingredients')
-        validated_data['author_id'] = self.context['request'].user
-        recipe = super().create(validated_data)
+    @staticmethod
+    def add_ingredients(recipe, ingredients):
         for ingredient in ingredients:
             RecipeIngredients.objects.get_or_create(
                 recipe_id=recipe,
@@ -82,14 +80,15 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             )
         return recipe
 
+    def create(self, validated_data):
+        ingredients = validated_data.pop('recipe_ingredients')
+        validated_data['author_id'] = self.context['request'].user
+        recipe = super().create(validated_data)
+        return self.add_ingredients(recipe, ingredients)
+
     def update(self, instance, validated_data):
         ingredients = validated_data.pop('recipe_ingredients')
         validated_data['image'] = validated_data.get('image', instance.image)
         recipe = super().update(instance, validated_data)
         recipe.ingredients.clear()
-        for ingredient in ingredients:
-            RecipeIngredients.objects.get_or_create(
-                recipe_id=recipe,
-                **ingredient,
-            )
-        return recipe
+        return self.add_ingredients(recipe, ingredients)
