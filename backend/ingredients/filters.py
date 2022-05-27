@@ -1,6 +1,6 @@
 from rest_framework import filters
 # from django.db.models import Q
-from django.db.models import Case, Value, When
+from django.db.models import Case, Value, When, IntegerField
 
 
 class IngredientsSearchFilter(filters.BaseFilterBackend):
@@ -12,6 +12,7 @@ class IngredientsSearchFilter(filters.BaseFilterBackend):
                 Case(
                     When(name__istartswith=name, then=Value(0)),
                     default=Value(1),
+                    output_field=IntegerField()
                 )
             )
             # part_one = queryset.filter(name__istartswith=name)
