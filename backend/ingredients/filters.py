@@ -9,7 +9,7 @@ class IngredientsSearchFilter(filters.BaseFilterBackend):
         name = request.GET.get('name')
         if name:
             result = queryset.filter(name__icontains=name).annotate(
-                Case(
+                ordering_index=Case(
                     When(name__istartswith=name, then=Value(0)),
                     default=Value(1),
                     output_field=IntegerField()
