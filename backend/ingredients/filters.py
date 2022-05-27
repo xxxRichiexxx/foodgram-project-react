@@ -8,8 +8,10 @@ class IngredientsSearchFilter(filters.BaseFilterBackend):
         name = request.GET.get('name')
         if name:
             part_one = queryset.filter(name__istartswith=name)
-            part_two = queryset.filter(name__icontains=name)
-            return part_two.union(part_one)
+            part_two = queryset.filter(
+                name__icontains=name
+            ).exclude(name__istartswith=name)
+            return part_one.union(part_two)[:50]
             # return queryset.filter(
             #     Q(name__istartswith=name) | Q(name__icontains=name)
             # )[:50]
