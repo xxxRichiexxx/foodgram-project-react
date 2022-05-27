@@ -23,4 +23,5 @@ class IngredientsSearchFilter(filters.BaseFilterBackend):
             # return queryset.filter(
             #     Q(name__istartswith=name) | Q(name__icontains=name)
             # )[:50]
-        return result.order_by('ordering_index', 'name')
+            return result.order_by('ordering_index', 'name')
+        return queryset
