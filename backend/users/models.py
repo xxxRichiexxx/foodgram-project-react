@@ -72,12 +72,12 @@ class CustomUser(AbstractUser):
         self.is_staff = self.is_admin
         content_type = ContentType.objects.get_for_model(Ingredient)
         ingredient_permission = Permission.objects.filter(
-                content_type=content_type
-            )
+            content_type=content_type
+        )
         if self.is_staff:
             for perm in ingredient_permission:
                 self.user_permissions.add(perm)
         else:
             for perm in ingredient_permission:
-                self.user_permissions.remove(perm)            
+                self.user_permissions.remove(perm)
         super().save(*args, **kwargs)
