@@ -13,10 +13,10 @@ class RecipesFilter(django_filters.FilterSet):
         to_field_name='slug',
         queryset=Tag.objects.all(),
     )
-    is_favorited = django_filters.BooleanFilter(
+    is_favorited = django_filters.CharFilter(
         method='get_is_favorited',
     )
-    is_in_shopping_cart = django_filters.BooleanFilter(
+    is_in_shopping_cart = django_filters.CharFilter(
         method='get_is_in_shopping_cart',
     )
 
@@ -26,12 +26,12 @@ class RecipesFilter(django_filters.FilterSet):
 
     def get_is_favorited(self, queryset, name, value):
         user = self.request.user
-        if not value:
-            return queryset
-        return queryset.filter(connoisseurs__id=user.id)
+        if value == '1':
+            return queryset.filter(connoisseurs__id=user.id)
+        return queryset.exclude(connoisseurs__id=user.id)
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         user = self.request.user
-        if value == 1:
+        if value == '1':
             return queryset.filter(buyers__id=user.id)
         return queryset.exclude(buyers__id=user.id)
