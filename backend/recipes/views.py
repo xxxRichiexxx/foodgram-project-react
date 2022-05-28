@@ -139,8 +139,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         for ingredient in ingredients:
             p.drawString(
                 x, y,
-                f"""- {ingredient['ingredient_id__name']} ({ingredient['measurement_unit']})
-                - {ingredient['count']}"""
+                (f"- {ingredient['ingredient_id__name']} "
+                 f"({ingredient['measurement_unit']}) "
+                 f"- {ingredient['count']}")
             )
             y -= 30
         p.showPage()
