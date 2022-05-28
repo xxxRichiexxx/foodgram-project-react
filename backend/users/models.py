@@ -70,7 +70,7 @@ class CustomUser(AbstractUser):
     def save(self, *args, **kwargs):
         if self.is_admin:
             self.is_staff = True
-            admins = Group.objects.get(name='администраторы')
+            admins = Group.objects.get(name='admins')
             if admins:
                 self.groups.add(admins)
         super().save(*args, **kwargs)

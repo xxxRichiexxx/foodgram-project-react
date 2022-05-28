@@ -42,6 +42,7 @@ class CustomUserViewSet(UserViewSet):
     @action(methods=['post', 'delete'], detail=True)
     def subscribe(self, request, id):
         user = request.user
+        # Конструкция ниже использована, т.к нужно вернуть статус 400, а не 404
         try:
             author = User.objects.get(id=id)
         except ObjectDoesNotExist:
