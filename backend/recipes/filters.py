@@ -1,22 +1,22 @@
-import django_filters
+from django_filters import rest_framework as filters
 
 from tags.models import Tag
 
 from .models import Recipe
 
 
-class RecipesFilter(django_filters.FilterSet):
+class RecipesFilter(filters.FilterSet):
     """Фильтрация рецептов."""
-    author = django_filters.CharFilter(field_name='author_id')
-    tags = django_filters.ModelMultipleChoiceFilter(
+    author = filters.CharFilter(field_name='author_id')
+    tags = filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         to_field_name='slug',
         queryset=Tag.objects.all(),
     )
-    is_favorited = django_filters.CharFilter(
+    is_favorited = filters.CharFilter(
         method='get_is_favorited',
     )
-    is_in_shopping_cart = django_filters.CharFilter(
+    is_in_shopping_cart = filters.CharFilter(
         method='get_is_in_shopping_cart',
     )
 
