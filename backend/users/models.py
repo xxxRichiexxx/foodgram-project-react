@@ -1,7 +1,9 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Permission
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
 
 from .validators import validate_username
+from ingredients.models import Ingredient
 
 
 class CustomUser(AbstractUser):
@@ -68,9 +70,14 @@ class CustomUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.is_staff = self.is_admin
-        # admins_group = Group.objects.get(id=1)
-        # if self.is_staff:
-        #     self.groups.add(admins_group)
-        # else:
-        #     self.groups.remove(admins_group)
+        content_type = ContentType.objects.get_for_model(Ingredient)
+        ingredient_permission = Permission.objects.filter(
+                content_type=content_type
+            )
+        if self.is_staff:
+            for perm in ingredient_permission:
+                self.user_permissions.add(perm)
+        else:
+            for perm in ingredient_permission:
+                self.user_permissions.remove(perm)            
         super().save(*args, **kwargs)
