@@ -22,16 +22,16 @@ class RecipesFilter(django_filters.FilterSet):
 
     class Meta:
         model = Recipe
-        fields = ['author', 'tags', ]
+        fields = ['author', 'tags', 'is_favorited', 'is_in_shopping_cart']
 
     def get_is_favorited(self, queryset, name, value):
         user = self.request.user
-        if value:
+        if value == 1:
             return queryset.filter(connoisseurs__id=user.id)
         return queryset.exclude(connoisseurs__id=user.id)
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         user = self.request.user
-        if value:
+        if value == 1:
             return queryset.filter(buyers__id=user.id)
         return queryset.exclude(buyers__id=user.id)
