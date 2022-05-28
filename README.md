@@ -20,22 +20,16 @@ pass: admin
 Сделайте Fork данного репозитория
 Подготовьте vps с ubuntu и docker
 Добавьте action secrets под Ваш проект:
-DB_ENGINE
-DB_HOST
-DB_NAME
-DB_PORT
-DOCKER_PASSWORD
-DOCKER_USERNAME
-HOST
-PASSPHRASE
-POSTGRES_DB
-POSTGRES_PASSWORD
-POSTGRES_USER
-SECRET_KEY
-SSH_KEY
-TELEGRAM_TO
-(кому отправить сообщение о статусе ci/cd workflow)
-TELEGRAM_TOKEN
-(токен вашего телеграм бота)
-USER
-(пользователь на хосте)
+- DB_ENGINE
+- DB_HOST
+- DB_NAME
+- DB_PORT
+- DOCKER_PASSWORD
+- DOCKER_USERNAME
+- HOST
+- PASSPHRASE
+- POSTGRES_DB
+- POSTGRES_PASSWORD
+- POSTGRES_USER
+- SECRET_KEY
+- SSH_KEY
