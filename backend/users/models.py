@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from .validators import validate_username
@@ -68,9 +68,9 @@ class CustomUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.is_staff = self.is_admin
-        admins_group = Group.objects.get(id=1)
-        if self.is_staff:
-            self.groups.add(admins_group)
-        else:
-            self.groups.remove(admins_group)
+        # admins_group = Group.objects.get(id=1)
+        # if self.is_staff:
+        #     self.groups.add(admins_group)
+        # else:
+        #     self.groups.remove(admins_group)
         super().save(*args, **kwargs)
