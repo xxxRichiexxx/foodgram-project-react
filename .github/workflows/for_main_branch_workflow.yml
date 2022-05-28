@@ -84,6 +84,7 @@ jobs:
           script: |
             sudo docker-compose stop
             sudo docker-compose rm web
+            sudo docker image rm infra_web_1
             cd infra
             rm .env
             touch .env
