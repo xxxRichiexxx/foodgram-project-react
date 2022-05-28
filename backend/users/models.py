@@ -71,6 +71,5 @@ class CustomUser(AbstractUser):
         if self.is_admin:
             self.is_staff = True
             admins = Group.objects.get(name='admins')
-            if admins:
-                self.groups.add(admins)
+            self.groups.add(admins)
         super().save(*args, **kwargs)
