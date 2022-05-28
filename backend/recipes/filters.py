@@ -26,9 +26,9 @@ class RecipesFilter(django_filters.FilterSet):
 
     def get_is_favorited(self, queryset, name, value):
         user = self.request.user
-        if value == 1:
-            return queryset.filter(connoisseurs__id=user.id)
-        return queryset.exclude(connoisseurs__id=user.id)
+        if not value:
+            return queryset
+        return queryset.filter(connoisseurs__id=user.id)
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         user = self.request.user
